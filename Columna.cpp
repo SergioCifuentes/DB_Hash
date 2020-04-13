@@ -36,6 +36,6 @@ if (tipo=="INT")
 {
     this->tipo=4;
 }
-tablaHash=TablaHash(this->tipo);  
+tablaHash=TablaHash(this->tipo,this->nombre);  
 }
 

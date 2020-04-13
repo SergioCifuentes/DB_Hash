@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
+#include "elemento.cpp"
 #include "Tabla.cpp"
+
 class DataBase
 {
 private:
@@ -66,14 +68,42 @@ void DataBase::selectTabla(string nombre,std::vector<std::string> columnas,strin
 
     }else{
         int indiceColumna=-1;
-        for (size_t i = 0; i < tablas.at(i).columnas.size(); i++)
+        for (size_t i = 0; i < tablas.at(indiceTabla).columnas.size(); i++)
         {
-            if (tablas.at(i).columnas.at(i).nombre==columnaCondicion)
+            if (tablas.at(indiceTabla).columnas.at(i).nombre==columnaCondicion)
             {
                 indiceColumna=i;
             }
             
         }
+        cout<<"buscando...\n";
+        vector<elemento*> elEn=tablas.at(indiceTabla).columnas.at(indiceColumna).tablaHash.buscarELemento(condicion);
+        if (columnas.at(0)=="*")
+        {
+            cout<<"\n";
+            for (size_t i = 0; i < tablas.at(indiceTabla).columnas.size(); i++)
+           {
+               cout<<tablas.at(indiceTabla).columnas.at(i).nombre<<"\t";
+           }
+           cout<<"\n";
+           for (size_t i = 0; i < tablas.at(indiceTabla).columnas.size(); i++)
+           {
+               for (size_t j = 0; j < elEn.size(); j++)
+               {
+                   cout<<"col: "<<elEn.at(j)->columna;
+                   if (tablas.at(indiceTabla).columnas.at(i).nombre==elEn.at(j)->columna)
+                   {
+                       cout<<elEn.at(j)<<"\t";
+                   }
+                   
+               }
+               
+           }
+           
+        }else{
+
+        }
+        
         
     }
     

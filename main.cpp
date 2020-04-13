@@ -20,7 +20,7 @@ int main()
         opcion = 0;
         cout << "[1] Querys \n";
         cout << "[2] Reportes\n";
-
+        cout << "[3] Salir\n";
         cin >> opcion;
 
         switch (opcion)
@@ -43,7 +43,12 @@ int main()
             } while (!salirQuerys);
 
             break;
+        case 2:
 
+            break;
+        case 3:
+            salir=true;
+            break;
         default:
             cout << "Opcion Invalida\n";
             break;
@@ -106,12 +111,13 @@ void manejarQueryEntrada(string text, bool &salirQuerys)
         {
             inicio++;
             string nombre = words.at(inicio);
-
-            if (!dataBase.verificarSiExisteTabla(nombre))
-            {
+            
+            if (dataBase.verificarSiExisteTabla(nombre))
+            {   cout<<"si existe la tabla\n";
                 inicio++;
                 if (words.size() > inicio)
                 {
+                    cout<<words.at(inicio);
                     if (words.at(inicio) == "WHERE")
                     {
                         dataBase.selectTabla(nombre,columnas,words.at(inicio+1),words.at(inicio+3));  
@@ -298,7 +304,13 @@ bool obtenerValoresEnParentesis(std::vector<std::string> &valores, std::vector<s
 
                 inicio = i + 1;
                 break;
+            }else if (words.at(i).rfind(",") == words.at(i).size() - 1)
+            {
+                string aux = words.at(i).substr(1, words.at(i).size() - 1);
+                aux = aux.substr(0, words.at(i).size() - 2);
+            valores.push_back(aux);
             }
+            
             else
             {
 

@@ -1,45 +1,74 @@
 #include <iostream>
 #define SIZE 5;
-#define fac  0.6;
+#define fac 0.6;
 #include <bits/stdc++.h>
 #include <sstream>
 #include <vector>
-#include <stdlib.h> 
-#include "Arbol.cpp"
+#include <stdlib.h>
+
 using namespace std;
 
-
-
-
 class elemento;
-
+#include "Arbol.cpp"
 class TablaHash
 {
 public:
   TablaHash();
-  TablaHash(int tipo);
+  TablaHash(int tipo,string columna);
   int obtenerPosicion(string dato);
   bool verificarSobreCarga();
   void ReHash();
+  vector<elemento *> buscarELemento(string el);
   int tipo;
   int elementos;
+  string columna;
   void insertar(elemento *dato, int posicion);
   int size;
-  std::vector<elemento*>tabla;
-  std::vector<Arbol*>arboles;
+  std::vector<elemento *> tabla;
+  std::vector<Arbol *> arboles;
 };
 TablaHash::TablaHash()
 {
 }
-TablaHash::TablaHash(int tipo)
+
+vector<elemento *> TablaHash::buscarELemento(string el)
+{
+  vector<elemento *> elEncontrados;
+  int pos = obtenerPosicion(el);
+  elemento *elPun = tabla.at(pos);
+  while (true)
+  {
+    if (elPun->dato == "NULL")
+    {
+      cout<<"Existe este elemetno";
+     break;
+    }
+    else
+    {
+      if (elPun->dato == el)
+      {
+        cout<<"elemento Encontrado";
+        cout<<"size: " <<elPun->elementos.size();
+        return elPun->elementos;
+      }else{
+        elPun=elPun->siguiente;
+      }
+    }
+  }
+
+  return elEncontrados;
+}
+TablaHash::TablaHash(int tipo,string columna)
 {
   size = SIZE;
+  this->columna=columna;
   this->tipo = tipo;
+  elementos = 0;
   //tabla->clear();
   for (size_t i = 0; i < size; i++)
   {
-    //elemento e =  elemento("NULL");
-    tabla.push_back(new elemento("NULL")); 
+
+    tabla.push_back(new elemento("NULL",columna));
     arboles.push_back(new Arbol(tipo));
   }
 }
@@ -127,7 +156,8 @@ void TablaHash ::insertar(elemento *dato, int posicion)
     elementos++;
 
     *tabla.at(posicion) = *dato;
-    //cout << "Espacio " << tabla.at(posicion).dato << "\n";
+    arboles.at(posicion)->agregarDatos(dato);
+    
   }
   else
   {
@@ -140,6 +170,7 @@ void TablaHash ::insertar(elemento *dato, int posicion)
       {
         elementos++;
         *el = *dato;
+        arboles.at(posicion)->agregarDatos(dato);
         break;
       }
       else
@@ -148,30 +179,29 @@ void TablaHash ::insertar(elemento *dato, int posicion)
       }
     }
   }
-  cout<<"->"<<(tabla.size());
+  cout << "->" << (tabla.size());
   if (verificarSobreCarga())
   {
     ReHash();
   }
-  cout<<"->"<<(tabla.size());
-  
-
+  cout << "->" << (tabla.size());
 }
-bool TablaHash::verificarSobreCarga(){
+bool TablaHash::verificarSobreCarga()
+{
 
-  float factorDeCarga=(float)elementos/(float)size;
-  return factorDeCarga>0.6;
-  
+  float factorDeCarga = (float)elementos / (float)size;
+  return factorDeCarga > 0.6;
 }
-void TablaHash::ReHash(){
+void TablaHash::ReHash()
+{
   for (size_t i = 0; i < size; i++)
   {
-    tabla.push_back(new elemento("NULL"));
-    arboles.push_back(new Arbol(tipo)); 
+    tabla.push_back(new elemento("NULL",columna));
+    //arboles.push_back(new Arbol(tipo));
   }
-  size=size*2;
-  
- /* elemento *arrayFl1;
+  size = size * 2;
+
+  /* elemento *arrayFl1;
   
  
   size=size*2;
