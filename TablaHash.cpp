@@ -48,7 +48,6 @@ vector<elemento *> TablaHash::buscarELemento(string el)
       if (elPun->dato == el)
       {
         cout<<"elemento Encontrado";
-        cout<<"size: " <<elPun->elementos.size();
         return elPun->elementos;
       }else{
         elPun=elPun->siguiente;
