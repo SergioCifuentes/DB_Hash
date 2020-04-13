@@ -40,7 +40,7 @@ vector<elemento *> TablaHash::buscarELemento(string el)
   {
     if (elPun->dato == "NULL")
     {
-      cout<<"Existe este elemetno";
+      cout<<"No Existe este elemetno";
      break;
     }
     else
@@ -179,12 +179,11 @@ void TablaHash ::insertar(elemento *dato, int posicion)
       }
     }
   }
-  cout << "->" << (tabla.size());
   if (verificarSobreCarga())
   {
     ReHash();
   }
-  cout << "->" << (tabla.size());
+
 }
 bool TablaHash::verificarSobreCarga()
 {

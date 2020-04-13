@@ -84,7 +84,7 @@ void Arbol::insertarNuevo(Nodo *recorrer, Nodo *nuevo, Nodo *PadreAB)
     {                
         raiz = nuevo;
         raiz->padre = NULL;
-        cout<<"sss"<<raiz;
+
     }else{
         vacio=true;
     }
@@ -93,17 +93,9 @@ void Arbol::insertarNuevo(Nodo *recorrer, Nodo *nuevo, Nodo *PadreAB)
     {
         cout<<"error";
         vacio=true;
-    }
-    
-    
+    }   
     if(vacio)
     {
-        cout<<"nu"<<nuevo->dato->dato;
-        cout<<"sawdawd\n\n";
-        
-        
-        cout<<"re"<<recorrer->dato->dato;
-        
         if (nuevo->dato->dato <= recorrer->dato->dato)
         {
             if (recorrer->izq != NULL)
@@ -210,38 +202,38 @@ int Arbol::altura(Nodo *recorrer){
 void Arbol::rotarDI(){
 	if (PadreAB==raiz){
 		
-		hijoHijo=sHijo->izq; //Ubico al hijo del hijo...
+		hijoHijo=sHijo->izq;
 		
-		raiz=hijoHijo; //Cambiar el apuntador de la raíz.
+		raiz=hijoHijo; 
 		
 		hijoHijo->padre=NULL; //Aseguro que el padre de la raíz se quede en NULL
 		
-		hijoHijo->dere=sHijo; // el nuevo padre debe apuntar al hijo izquierdo.		
-		sHijo->padre=hijoHijo; //El hijo debe apuntar a su nuevo padre.
+		hijoHijo->dere=sHijo; 
+		sHijo->padre=hijoHijo;
 		if(sHijo->izq!=NULL){
 			sHijo->izq=hijoHijo->izq;
 		}else{
-			sHijo->izq=NULL; //Apuntar a Null la parte izquierda del hijo, ya que ahora no tendrá hijos...			
+			sHijo->izq=NULL; 
 		}
 
 		hijoHijo->izq=PadreAB; //El nuevo padre debe apuntar al hijo derecho.
 		
 		if(PadreAB->izq==NULL){
-			PadreAB->izq=NULL; //El antiguo padre debe apuntar ahora a nu
+			PadreAB->izq=NULL; 
 		}
 
 		PadreAB->dere=NULL; //el antiguo padre debe apuntar ahora a null
-		PadreAB->padre=hijoHijo; //Apuntar al nuevo padre ...
+		PadreAB->padre=hijoHijo; 
 	}else{
 		
 		abuelo=PadreAB->padre;
 		
-		hijoHijo=sHijo->izq; //Ubico al hijo del hijo...
+		hijoHijo=sHijo->izq; 
 		
 		hijoHijo->padre=abuelo; //Aseguro que el padre de la raíz se quede apuntando al abuelo
 		
-		hijoHijo->dere=sHijo; // el nuevo padre debe apuntar al hijo izquierdo.		
-		sHijo->padre=hijoHijo; //El hijo debe apuntar a su nuevo padre.
+		hijoHijo->dere=sHijo; 
+		sHijo->padre=hijoHijo;
 		
 		if(sHijo->izq!=NULL){
 			sHijo->izq=hijoHijo->izq;
@@ -249,16 +241,16 @@ void Arbol::rotarDI(){
 			sHijo->izq=NULL; //Apuntar a Null la parte izquierda del hijo, ya que ahora no tendrá hijos...			
 		}
 		
-		//sHijo->dere=NULL; // Apuntar a Null la parte derecha del hijo, ya que ahora no tendrá Hijos...
+		//sHijo->dere=NULL; 
 		
-		hijoHijo->izq=PadreAB; //El nuevo padre debe apuntar al hijo derecho.
+		hijoHijo->izq=PadreAB; 
 		
 		if(PadreAB->izq==NULL){
 			PadreAB->izq=NULL; //El antiguo padre debe apuntar ahora a nu
 		}
 		
-		PadreAB->dere=NULL; //el antiguo padre debe apuntar ahora a null
-		PadreAB->padre=hijoHijo; //Apuntar al nuevo padre ...
+		PadreAB->dere=NULL; 
+		PadreAB->padre=hijoHijo; 
 		
 		abuelo->dere=hijoHijo;
 	}
@@ -269,49 +261,49 @@ void Arbol::rotarDI(){
 void Arbol::rotarID(){
 	if (PadreAB==raiz){
 		
-		hijoHijo=sHijo->dere; //Ubico al hijo del hijo...
+		hijoHijo=sHijo->dere; 
 		
-		raiz=hijoHijo; //Cambiar el apuntador de la raíz.
+		raiz=hijoHijo; 
 		
 		hijoHijo->padre=NULL; //Aseguro que el padre de la raíz se quede en NULL
 		
-		hijoHijo->izq=sHijo; // el nuevo padre debe apuntar al hijo izquierdo.		
+		hijoHijo->izq=sHijo; 
 		sHijo->padre=hijoHijo; //El hijo debe apuntar a su nuevo padre.
 		
-		sHijo->dere=NULL; //Apuntar a Null la parte izquierda del hijo, ya que ahora no tendrá hijos...			
+		sHijo->dere=NULL; 
 
 		PadreAB->izq=NULL; //El antiguo padre debe apuntar ahora a null 
 		
-		hijoHijo->dere=PadreAB; //El nuevo padre debe apuntar al hijo derecho.
+		hijoHijo->dere=PadreAB; 
 		
 		
 		if(PadreAB->dere==NULL){
 			PadreAB->dere=NULL; //El antiguo padre debe apuntar ahora a nu
 		}
-		PadreAB->padre=hijoHijo; //Apuntar al nuevo padre ...
+		PadreAB->padre=hijoHijo; 
 	}else{
 		
 		abuelo=PadreAB->padre;
 		
-		hijoHijo=sHijo->dere; //Ubico al hijo del hijo...
+		hijoHijo=sHijo->dere; 
 		
 		hijoHijo->padre=abuelo; //Aseguro que el padre de la raíz se quede apuntando al abuelo
 		abuelo->izq=hijoHijo;
 		
-		hijoHijo->izq=sHijo; // el nuevo padre debe apuntar al hijo izquierdo.		
+		hijoHijo->izq=sHijo; 
 		sHijo->padre=hijoHijo; //El hijo debe apuntar a su nuevo padre.
 				
-		sHijo->dere=NULL; //Apuntar a Null la parte izquierda del hijo, ya que ahora no tendrá hijos...			
+		sHijo->dere=NULL; 
 		
 		
-		hijoHijo->dere=PadreAB; //El nuevo padre debe apuntar al hijo derecho.
+		hijoHijo->dere=PadreAB; 
 		
-		PadreAB->izq=NULL; //El antiguo padre debe apuntar ahora a null 
+		PadreAB->izq=NULL; 
 		
 		if(PadreAB->dere==NULL){
-			PadreAB->dere=NULL; //El antiguo padre debe apuntar ahora a nu
+			PadreAB->dere=NULL; 
 		}
-		PadreAB->padre=hijoHijo; //Apuntar al nuevo padre ...
+		PadreAB->padre=hijoHijo; 
 	}
 }
 
@@ -394,7 +386,7 @@ void Arbol::agregarDatos(elemento *el)
             insertarNuevo(recorrer,nuevo, PadreAB);
 
             //BBaltura(recorrer);
-            //necesidadEquilibrar(recorrer);
+            necesidadEquilibrar(recorrer);
         }
         else
         {

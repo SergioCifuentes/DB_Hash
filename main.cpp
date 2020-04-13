@@ -22,7 +22,7 @@ int main()
         cout << "[2] Reportes\n";
         cout << "[3] Salir\n";
         cin >> opcion;
-
+    string nombreTabla;
         switch (opcion)
         {
         case 1:
@@ -34,7 +34,6 @@ int main()
                 cin.get();
                 cout << "Ingrese el query\n";
                 cout << "'QUIT' para salir\n";
-                cout << "";
 
                 string query;
                 getline(cin, query);
@@ -44,10 +43,57 @@ int main()
 
             break;
         case 2:
+            int opcionReporte;
+            
+             
+            cout << "[1] Cantidad De Datos En La DB\n";
+            cout << "[2] Cantidad De Datos por Tabla\n";
+            cout << "[3]Cantidad de filas de un mismo tipo de dato en una tabla\n";
+            cout << "[4] Cantidad de todas las columnas de todas las tablas de una base de datos\n";
+            cout << "[5] Archivo Log de la base de datos\n";
+            cin >> opcionReporte;
+           
+            switch (opcionReporte)
+            {
+            case 1:
+                cout << "La Cantidad De Datos es: " << dataBase.obtenerNumeroDeElementos()<<"\n";
+                break;
+            case 2:
+                cin.get();
+                cout << "Ingrese El Nombre de la Tabla:\n";
+                   
+                getline(cin, nombreTabla);
+                if(dataBase.verificarSiExisteTabla(nombreTabla)){
+                    cout << "La Cantidad De Datos En "<<nombreTabla<<" es: " << dataBase.obtenerNumeroDeElementosEnTabla(nombreTabla)<<"\n";
+                }
+
+
+                break;
+            case 3:
+                cin.get();
+                cout << "Ingrese El Nombre de la Tabla:\n";      
+                getline(cin, nombreTabla);
+                if(dataBase.verificarSiExisteTabla(nombreTabla)){
+                    cout << "La Cantidad De Filas En "<<nombreTabla<<" es: " << dataBase.obtenerNumeroDeFilasEnTabla(nombreTabla)<<"\n";
+                }
+                break;
+            case 4:
+                cin.get();
+                cout << "Ingrese El Nombre de la Tabla:\n";
+                getline(cin, nombreTabla);
+                if(dataBase.verificarSiExisteTabla(nombreTabla)){
+                    cout << "La Cantidad De Columnas En "<<nombreTabla<<" es: " << dataBase.obtenerNumeroDeColumnasEnTabla(nombreTabla)<<"\n";
+                }
+                break;
+
+            default:
+                cout << "Opcion Invalida";
+                break;
+            }
 
             break;
         case 3:
-            salir=true;
+            salir = true;
             break;
         default:
             cout << "Opcion Invalida\n";
@@ -111,23 +157,24 @@ void manejarQueryEntrada(string text, bool &salirQuerys)
         {
             inicio++;
             string nombre = words.at(inicio);
-            
+
             if (dataBase.verificarSiExisteTabla(nombre))
-            {   cout<<"si existe la tabla\n";
+            {
+                cout << "si existe la tabla\n";
                 inicio++;
                 if (words.size() > inicio)
                 {
-                    cout<<words.at(inicio);
+                    cout << words.at(inicio);
                     if (words.at(inicio) == "WHERE")
                     {
-                        dataBase.selectTabla(nombre,columnas,words.at(inicio+1),words.at(inicio+3));  
+                        dataBase.selectTabla(nombre, columnas, words.at(inicio + 1), words.at(inicio + 3));
                     }
-                }else{
-                        dataBase.selectTabla(nombre,columnas,"NULL","NULL");
+                }
+                else
+                {
+                    dataBase.selectTabla(nombre, columnas, "NULL", "NULL");
                 }
             }
-
-            
         }
     }
     else if (words.at(0) == "INSERT")
@@ -304,13 +351,14 @@ bool obtenerValoresEnParentesis(std::vector<std::string> &valores, std::vector<s
 
                 inicio = i + 1;
                 break;
-            }else if (words.at(i).rfind(",") == words.at(i).size() - 1)
+            }
+            else if (words.at(i).rfind(",") == words.at(i).size() - 1)
             {
                 string aux = words.at(i).substr(1, words.at(i).size() - 1);
                 aux = aux.substr(0, words.at(i).size() - 2);
-            valores.push_back(aux);
+                valores.push_back(aux);
             }
-            
+
             else
             {
 

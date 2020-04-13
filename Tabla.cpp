@@ -44,26 +44,35 @@ void Tabla::insertarFila(std::vector<std::string> &campos, std::vector<std::stri
         {
             for (size_t j = 0; j < columnas.size(); j++)
             {
-                cout<<campos.at(i)<<" IGUAL " << columnas.at(j).nombre;
+                
+                if (campos.at(i) == columnas.at(j).nombre)
+                {
+                    string dato = valores.at(i);
+                    
+                    elemento *el = new elemento(dato,columnas.at(j).nombre);
+                   elementos.insert(elementos.end(), el);
+                    
+                }
+            }
+        }
+
+
+
+
+        for (size_t i = 0; i < campos.size(); i++)
+        {
+            for (size_t j = 0; j < columnas.size(); j++)
+            {
                 if (campos.at(i) == columnas.at(j).nombre)
                 {
                     string dato = valores.at(i);
                     TablaHash *th = &columnas.at(j).tablaHash;
-                    elemento *el = new elemento(dato,columnas.at(j).nombre);
-                   elementos.insert(elementos.end(), el);
+                    elementos.at(i)->insertarElementoDeFilas(elementos);
                     th->insertar(elementos.at(i), th->obtenerPosicion(dato));
+                    
                 }
             }
         }
-        cout<<"))"<<elementos.size()<<"))";
-        for (size_t i = 0; i < elementos.size(); i++)
-        {
-            cout<<elementos.at(i)->dato<<"**";
-            elementos.at(i)->insertarElementoDeFilas(elementos);
-        }
-        TablaHash *th = &columnas.at(0).tablaHash;
-        cout<<th->tabla.at(3)->dato<<"$$";
-        cout<<th->tabla.at(3)->elementos.size()<<"$$";
     }
 }
 
