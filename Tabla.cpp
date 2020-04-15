@@ -1,8 +1,9 @@
 #include <iostream>
 
 
-#include "Columna.cpp"
+
 class elemento;
+#include "Columna.cpp"
 #include <vector>
 
 using namespace std;
@@ -31,7 +32,6 @@ Tabla::Tabla(string nombre, std::vector<string> nombresColumna, vector<string> t
 }
 void Tabla::insertarFila(std::vector<std::string> &campos, std::vector<std::string> &valores)
 {
-    cout << columnas.size() << " " << campos.size() << " " << valores.size();
     if (columnas.size() != campos.size() || columnas.size() != valores.size())
     {
         cout << "Error Tabla cuenta con " << columnas.size() << " Columnas";
@@ -73,6 +73,7 @@ void Tabla::insertarFila(std::vector<std::string> &campos, std::vector<std::stri
                 }
             }
         }
+        cout<<"Se insertaron "<<campos.size()<<" elementos\n";
     }
 }
 

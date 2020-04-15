@@ -21,7 +21,7 @@ public:
     void rotarID();
     void rotarDI();
     void rotarII();
-    
+    string recorarParaGrafica(Nodo *nodo);
     int exiteenArbol(Nodo *recorrer, string buscado, int tipo);
     ~Arbol();
 };
@@ -58,8 +58,6 @@ int Arbol::exiteenArbol(Nodo *recorrer, string buscado, int tipo)
     }
     else
     {
-        cout<<"\nbus="<<buscado;
-    cout<<"\nrec="<<recorrer->dato->dato;
         if (buscado < recorrer->dato->dato)
         {
             return exiteenArbol(recorrer->izq, buscado, tipo);
@@ -96,7 +94,15 @@ void Arbol::insertarNuevo(Nodo *recorrer, Nodo *nuevo, Nodo *PadreAB)
     }   
     if(vacio)
     {
-        if (nuevo->dato->dato <= recorrer->dato->dato)
+		try
+		{
+			int dato1;
+			int dato2;
+			std::istringstream(nuevo->dato->dato)>>dato1;
+			std::istringstream(recorrer->dato->dato)>>dato2;
+
+
+			if (dato1 <= dato2)
         {
             if (recorrer->izq != NULL)
             {
@@ -111,8 +117,45 @@ void Arbol::insertarNuevo(Nodo *recorrer, Nodo *nuevo, Nodo *PadreAB)
                 return;
             }
         }
-        else if (nuevo->dato->dato > recorrer->dato->dato)
+        else
         {
+			if (recorrer->dere != NULL)
+            {
+                PadreAB = recorrer->dere;
+                //BBcout<<"Padre: "<<PadreAB->dato<<" Nuevo: "<<nuevo->dato<<endl;
+                insertarNuevo(recorrer->dere, nuevo, PadreAB);
+            }
+            else
+            {
+                recorrer->dere = nuevo;
+                nuevo->padre = PadreAB;
+                return;
+            }
+        }
+
+
+
+		}
+		catch(const std::exception& e)
+		{
+			if (nuevo->dato->dato < recorrer->dato->dato)
+        {
+            if (recorrer->izq != NULL)
+            {
+                PadreAB = recorrer->izq;
+                //BBcout<<"Padre: "<<PadreAB->dato<<" Nuevo: "<<nuevo->dato<<endl;
+                insertarNuevo(recorrer->izq, nuevo, PadreAB);
+            }
+            else
+            {
+                recorrer->izq = nuevo;
+                nuevo->padre = PadreAB;
+                return;
+            }
+        }
+        else
+        {
+			cout<<"\n"<<recorrer->dere<<"\n";
             if (recorrer->dere != NULL)
             {
                 PadreAB = recorrer->dere;
@@ -126,6 +169,10 @@ void Arbol::insertarNuevo(Nodo *recorrer, Nodo *nuevo, Nodo *PadreAB)
                 return;
             }
         }
+		}
+		
+		
+        
     }
 }
 
@@ -316,6 +363,7 @@ void Arbol::necesidadEquilibrar(Nodo *recorrer){ //Con esta función analizo si 
 		necesidadEquilibrar(recorrer->izq);
 	    necesidadEquilibrar(recorrer->dere);
 
+		cout<<"fe:::"<<recorrer->fe<<":";
 		if ((recorrer->fe==2)||(recorrer->fe==-2)){
 			system("cls");
 			cout<<"Es necesario equilibrar el arbol"<<endl;
@@ -371,27 +419,57 @@ void Arbol::necesidadEquilibrar(Nodo *recorrer){ //Con esta función analizo si 
 
 void Arbol::agregarDatos(elemento *el)
 {
-    cout<<"raiz"<<raiz;
+
     nuevo = nuevoNodo(el);
     nuevo->tipo = tipo;
-    cout<<"ar"<<nuevo->dato->dato;
-    cout<<"raiz"<<raiz;
     recorrer=raiz;
     if (nuevo->dato->dato != "NULL")
     {
+		
         if (exiteenArbol(recorrer, nuevo->dato->dato, tipo) == 1)
         { //Evalua si el nodo ya existe en el arbol.
-            PadreAB = raiz;
-            cout<<"nuevo"<<nuevo;
-            insertarNuevo(recorrer,nuevo, PadreAB);
+            
+			PadreAB = raiz;
+            
+			insertarNuevo(recorrer,nuevo, PadreAB);
 
-            //BBaltura(recorrer);
+        	altura(recorrer);
             necesidadEquilibrar(recorrer);
         }
         else
         {
             cout << "El numero ya existe en el arbol" << endl;
         }
+		
     }
-    cout<<"La Altura del arbol es: "<<altura(recorrer)<<endl;
+	if (altura(recorrer)==0)
+	{
+		cout<<"La Altura del arbol es: 1"<<endl;
+	}else{
+		cout<<"La Altura del arbol es: "<<altura(recorrer)<<endl;
+	}
+	
+    
+}
+
+string Arbol::recorarParaGrafica(Nodo *nodo){
+	string texto="";
+	if (nodo->dere!=NULL)
+	{
+		texto+=nodo->dato->dato;
+		texto+="->";
+		texto+=nodo->dere->dato->dato;
+		texto+=";\n";
+		texto+=recorarParaGrafica(nodo->dere);
+	}
+	if (nodo->izq!=NULL)
+	{
+		texto+=nodo->dato->dato;
+		texto+="->";
+		texto+=nodo->izq->dato->dato;
+		texto+=";\n";
+		texto+=recorarParaGrafica(nodo->izq);
+	}
+	
+	return texto;
 }

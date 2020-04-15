@@ -9,6 +9,7 @@ using namespace std;
 void manejarQueryEntrada(string text, bool &salirQuerys);
 #include "DataBase.cpp"
 
+
 DataBase dataBase;
 int main()
 {
@@ -164,7 +165,6 @@ void manejarQueryEntrada(string text, bool &salirQuerys)
                 inicio++;
                 if (words.size() > inicio)
                 {
-                    cout << words.at(inicio);
                     if (words.at(inicio) == "WHERE")
                     {
                         dataBase.selectTabla(nombre, columnas, words.at(inicio + 1), words.at(inicio + 3));
@@ -186,14 +186,7 @@ void manejarQueryEntrada(string text, bool &salirQuerys)
         {
             if ((obtenerValoresEnParentesis(valores, words, indice)))
             {
-                for (size_t i = 0; i < campos.size(); i++)
-                {
-                    cout << campos.at(i) << "CC\n";
-                }
-                for (size_t i = 0; i < valores.size(); i++)
-                {
-                    cout << valores.at(i) << "VV\n";
-                }
+                
                 if (dataBase.verificarSiExisteTabla(words.at(2)))
                 {
                     dataBase.insertarATabla(words.at(2), campos, valores);
@@ -211,7 +204,7 @@ void manejarQueryEntrada(string text, bool &salirQuerys)
         if (obtenerColumnas(nombres, tipos, words))
         {
 
-            Tabla tabla = Tabla(words.at(2), nombres, tipos);
+            Tabla *tabla = new Tabla(words.at(2), nombres, tipos);
             dataBase.insertarTabla(tabla);
         }
     }
@@ -219,6 +212,29 @@ void manejarQueryEntrada(string text, bool &salirQuerys)
     {
 
         salirQuerys = true;
+    }
+    else if (words.at(0) == "GRAPH")
+    {
+
+        string nombreTabla=words.at(2);
+
+        if (dataBase.verificarSiExisteTabla(nombreTabla))
+        {
+            string columna="NULL";
+
+            for (size_t i = 0; i < words.size(); i++)
+            {
+            }
+            if (words.size()>=5)
+            {
+            columna=words.at(4);
+
+            }
+            dataBase.graficarArbol(nombreTabla,columna);
+        }
+        
+        
+        
     }
     else
     {
@@ -230,7 +246,6 @@ bool obtenerColumnas(std::vector<std::string> &nombres, std::vector<std::string>
 {
     for (size_t i = 3; i < words.size(); i++)
     {
-
         if (words.at(i) == "(")
         {
             nombres.push_back(words.at(i + 1));
@@ -259,13 +274,22 @@ bool obtenerColumnas(std::vector<std::string> &nombres, std::vector<std::string>
             nombres.push_back(words.at(i + 1));
             i++;
         }
-        else if (words.at(i).rfind(")") == words.at(i).size() - 1)
+        else if (words.at(i).rfind(")") == words.at(i).size() - 1|| words.at(i).rfind(");") == words.at(i).size() - 2)
         {
-            string aux = words.at(i).substr(0, words.at(i).size() - 1);
+            string aux;
+            
+            if (words.at(i).rfind(")") == words.at(i).size() - 1)
+            {
+                aux = words.at(i).substr(0, words.at(i).size() - 1);
+            }else{
+                aux = words.at(i).substr(0, words.at(i).size() - 2);
+            }
+            
+            
             tipos.push_back(aux);
             break;
         }
-        else if (words.at(i) == ")")
+        else if (words.at(i) == ")"||words.at(i) == ");")
         {
 
             break;

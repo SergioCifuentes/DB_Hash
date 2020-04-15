@@ -147,8 +147,6 @@ void TablaHash ::insertar(elemento *dato, int posicion)
   elemento *el = tabla.at(posicion);
   cout << "\nElemento " << dato->dato << "\n";
   cout << "Posicion " << posicion << "\n";
-  cout << "Elementos " << elementos << "\n";
-  cout << "Espacio " << el->dato << "\n";
   //cout << "Espaci2 " << tabla.at(posicion).dato << "\n";
   if (el->dato == "NULL")
   {
@@ -162,8 +160,6 @@ void TablaHash ::insertar(elemento *dato, int posicion)
   {
     while (true)
     {
-      cout << "=====================";
-      cout << "Espacio " << el->dato << "\n";
       //cout << "Espacio " << tabla->at(posicion).siguiente->dato<< "\n";
       if (el->dato == "NULL")
       {

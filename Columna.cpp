@@ -22,7 +22,6 @@ Columna::Columna(string nombre,string tipo){
 
   
 this->nombre=nombre;
-cout<<tipo<<"--------"<<(tipo=="INT");
 if (tipo=="INT")
 {
     this->tipo=1;

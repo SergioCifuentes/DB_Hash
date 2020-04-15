@@ -2,7 +2,7 @@
 #include <vector>
 #include "elemento.cpp"
 #include "Tabla.cpp"
-
+#include "ControladorDeGraficas.cpp"
 class DataBase
 {
 private:
@@ -12,12 +12,14 @@ public:
     DataBase();
     bool verificarSiExisteTabla(string nombre);
     void insertarATabla(string nombre,std::vector<std::string> &campos,std::vector<std::string> &valores);
-    std::vector<Tabla> tablas;
+    std::vector<Tabla *> tablas;
+    ControladorDeGraficas controladorDeGraficas;
     int obtenerNumeroDeElementos();
     int obtenerNumeroDeElementosEnTabla(string nombre);
     int obtenerNumeroDeColumnasEnTabla(string nombre);
     int obtenerNumeroDeFilasEnTabla(string nombre);
-    void insertarTabla(Tabla tabla);
+    void insertarTabla(Tabla * tabla);
+    void graficarArbol(string tabla, string columna);
     void selectTabla(string nombre,std::vector<std::string> columnas,string columnaCondicion,string condicion);
     ~DataBase();
 };
@@ -28,10 +30,27 @@ DataBase::DataBase(){
 DataBase::~DataBase(){
     
 }
-bool DataBase:: verificarSiExisteTabla(string nombre){
-    for (size_t i = 0; i < this->tablas.size(); i++)
+
+void DataBase::graficarArbol(string tabla, string columna){
+    for (size_t i = 0; i < tablas.size(); i++)
     {
-        if (tablas.at(i).nombre==nombre)return true;
+        cout<<tablas.at(i)->nombre;
+        if (tablas.at(i)->nombre==tabla){
+            cout<<"existe2";
+            controladorDeGraficas.graficarTabla(tablas.at(i),columna);
+            
+        };
+        
+    }
+}
+
+bool DataBase:: verificarSiExisteTabla(string nombre){
+    cout<<"verificando existencia\n";
+    cout<<"tablas:"<<tablas.size()+"\n";
+    cout<<"<<<<<<<";
+    for (size_t i = 0; i < tablas.size(); i++)
+    {
+        if (tablas.at(i)->nombre==nombre)return true;
         
     }
     cout<<"\n tabla "<<nombre <<" no existe \n";
@@ -41,8 +60,9 @@ void DataBase:: insertarATabla(string nombre,std::vector<std::string> &campos,st
     
     for (size_t i = 0; i < this->tablas.size(); i++)
     {
-        if (tablas.at(i).nombre==nombre){
-            tablas.at(i).insertarFila(campos,valores);
+        if (tablas.at(i)->nombre==nombre){
+            tablas.at(i)->insertarFila(campos,valores);
+
             break;
         }
         
@@ -50,7 +70,8 @@ void DataBase:: insertarATabla(string nombre,std::vector<std::string> &campos,st
     
 }
 
-void DataBase::insertarTabla(Tabla tabla){
+void DataBase::insertarTabla(Tabla* tabla){
+    cout<<"Tabla Insertada\n";
     tablas.insert(tablas.end(),tabla);
 }
 
@@ -58,7 +79,7 @@ void DataBase::selectTabla(string nombre,std::vector<std::string> columnas,strin
     int indiceTabla=0;
     for (size_t i = 0; i < this->tablas.size(); i++)
     {
-        if (tablas.at(i).nombre==nombre){
+        if (tablas.at(i)->nombre==nombre){
             indiceTabla=i;
         }
         
@@ -72,30 +93,30 @@ void DataBase::selectTabla(string nombre,std::vector<std::string> columnas,strin
 
     }else{
         int indiceColumna=-1;
-        for (size_t i = 0; i < tablas.at(indiceTabla).columnas.size(); i++)
+        for (size_t i = 0; i < tablas.at(indiceTabla)->columnas.size(); i++)
         {
-            if (tablas.at(indiceTabla).columnas.at(i).nombre==columnaCondicion)
+            if (tablas.at(indiceTabla)->columnas.at(i).nombre==columnaCondicion)
             {
                 indiceColumna=i;
             }
             
         }
         cout<<"buscando...\n";
-        vector<elemento*> elEn=tablas.at(indiceTabla).columnas.at(indiceColumna).tablaHash.buscarELemento(condicion);
+        vector<elemento*> elEn=tablas.at(indiceTabla)->columnas.at(indiceColumna).tablaHash.buscarELemento(condicion);
         if (columnas.at(0)=="*")
         {
             cout<<"\n";
-            for (size_t i = 0; i < tablas.at(indiceTabla).columnas.size(); i++)
+            for (size_t i = 0; i < tablas.at(indiceTabla)->columnas.size(); i++)
            {
-               cout<<tablas.at(indiceTabla).columnas.at(i).nombre<<"\t";
+               cout<<tablas.at(indiceTabla)->columnas.at(i).nombre<<"\t";
            }
            cout<<"\n";
-           for (size_t i = 0; i < tablas.at(indiceTabla).columnas.size(); i++)
+           for (size_t i = 0; i < tablas.at(indiceTabla)->columnas.size(); i++)
            {
                for (size_t j = 0; j < elEn.size(); j++)
                {
                    
-                   if (tablas.at(indiceTabla).columnas.at(i).nombre==elEn.at(j)->columna)
+                   if (tablas.at(indiceTabla)->columnas.at(i).nombre==elEn.at(j)->columna)
                    {
                        cout<<elEn.at(j)->dato<<"\t";
                    }
@@ -136,9 +157,9 @@ int DataBase::obtenerNumeroDeElementos(){
     int ele =0;
     for (size_t i = 0; i < tablas.size(); i++)
     {
-        for (size_t j = 0; j < tablas.at(i).columnas.size(); j++)
+        for (size_t j = 0; j < tablas.at(i)->columnas.size(); j++)
         {
-            ele+=tablas.at(i).columnas.at(j).tablaHash.elementos;
+            ele+=tablas.at(i)->columnas.at(j).tablaHash.elementos;
         }
         
     }
@@ -149,8 +170,8 @@ int DataBase::obtenerNumeroDeFilasEnTabla(string nombre){
     int ele =obtenerNumeroDeElementosEnTabla(nombre);
     for (size_t i = 0; i < this->tablas.size(); i++)
     {
-        if (tablas.at(i).nombre==nombre){
-            return (int)ele/(int)tablas.at(i).columnas.size();
+        if (tablas.at(i)->nombre==nombre){
+            return (int)ele/(int)tablas.at(i)->columnas.size();
             
         };
         
@@ -160,8 +181,8 @@ int DataBase::obtenerNumeroDeFilasEnTabla(string nombre){
 int DataBase::obtenerNumeroDeColumnasEnTabla(string nombre){
     for (size_t i = 0; i < this->tablas.size(); i++)
     {
-        if (tablas.at(i).nombre==nombre){
-            return (int)tablas.at(i).columnas.size();
+        if (tablas.at(i)->nombre==nombre){
+            return (int)tablas.at(i)->columnas.size();
             
         };
         
@@ -173,10 +194,10 @@ int DataBase::obtenerNumeroDeElementosEnTabla(string nombre){
     int ele =0;
     for (size_t i = 0; i < this->tablas.size(); i++)
     {
-        if (tablas.at(i).nombre==nombre){
-            for (size_t j = 0; j < tablas.at(i).columnas.size(); j++)
+        if (tablas.at(i)->nombre==nombre){
+            for (size_t j = 0; j < tablas.at(i)->columnas.size(); j++)
             {
-                ele+=tablas.at(i).columnas.at(j).tablaHash.elementos;
+                ele+=tablas.at(i)->columnas.at(j).tablaHash.elementos;
             }
             
         };

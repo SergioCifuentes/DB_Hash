@@ -1,0 +1,4 @@
+display: unable to open image `./Graficas/Nombre.png': No such file or directory @ error/blob.c/OpenBlob/2712.
+display: no decode delegate for this image format `' @ error/constitute.c/ReadImage/501.
+display: unable to open image `./Graficas/imagen.png': No such file or directory @ error/blob.c/OpenBlob/2712.
+display: no decode delegate for this image format `' @ error/constitute.c/ReadImage/501.
